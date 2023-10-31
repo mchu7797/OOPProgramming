@@ -40,7 +40,7 @@ int main(void) {
     }
 
     for (int i = 0; i < 26; ++i) {
-        outputStream << (char) i << ":" << count[i] << endl;
+        outputStream << (char) (i + 'A') << ":" << count[i] << endl;
     }
 
     inputStream.close();
