@@ -8,8 +8,8 @@
 using namespace std;
 
 int main(void) {
-    const char* inputFileName = "alphabet.txt";
-    const char* outputFilename = "result.txt";
+    const char *inputFileName = "alphabet.txt";
+    const char *outputFilename = "result.txt";
 
     ifstream inputStream(inputFileName);
     ofstream outputStream(outputFilename);
@@ -24,11 +24,11 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    int count[26] = { 0 };
+    int count[26] = {0};
     int charData;
 
     while ((charData = inputStream.get()) != EOF) {
-        cout << (char)charData;
+        cout << (char) charData;
 
         if (charData >= 'A' && charData <= 'Z') {
             count[charData - 'A']++;
@@ -40,7 +40,7 @@ int main(void) {
     }
 
     for (int i = 0; i < 26; ++i) {
-        outputStream << (char)i << ":" << count[i] << endl;
+        outputStream << (char) i << ":" << count[i] << endl;
     }
 
     inputStream.close();
