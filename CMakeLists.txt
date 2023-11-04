@@ -9,9 +9,13 @@ add_executable(5-2 5th/5-2.cpp)
 add_executable(5-3 5th/5-3.cpp)
 add_executable(5-4 5th/5-4.cpp)
 add_executable(5-5 5th/5-5.cpp)
+add_executable(q5-4 5th/q5-4.cpp)
+add_executable(q5-5 5th/q5-5.cpp)
+add_executable(q5-7 5th/q5-7.cpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/12th/alphabet.txt ${CMAKE_CURRENT_BINARY_DIR}/alphabet.txt COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/12th/student-info.txt ${CMAKE_CURRENT_BINARY_DIR}/student-info.txt COPYONLY)
 add_executable(12-1 12th/12-1.cpp)
 add_executable(12-2 12th/12-2.cpp)
 add_executable(12-3 12th/12-3.cpp)
+
