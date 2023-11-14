@@ -19,7 +19,7 @@ bool bigger(int a, int b, int& big) {
     return false;
 }
 
-int main(void) {
+int main() {
     int a, b, big;
     std::cout << "숫자 입력 :";
     std::cin >> a >> b;
