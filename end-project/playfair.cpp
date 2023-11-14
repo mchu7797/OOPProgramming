@@ -5,17 +5,19 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <exception>
+#include <stdexcept>
 
 class PlayFair {
     char encryptMatrix[5][5] = {0};
     std::string encryptKey;
     std::string overlappedPair;
 public:
-    PlayFair(std::string encryptKey, std::string overlappedPair);
+    PlayFair(const std::string& encryptKey, std::string overlappedPair);
 
     std::string EncryptString(std::string string);
 
-    void EncryptFile(std::string inputFilename, std::string outputFilename);
+    void EncryptFile(const std::string& inputFilename, const std::string& outputFilename);
 };
 
 std::string RemoveDuplicates(std::string string) {
@@ -34,7 +36,7 @@ std::string RemoveDuplicates(std::string string) {
     return string;
 }
 
-PlayFair::PlayFair(std::string encryptKey, std::string overlappedPair) {
+PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
     if (overlappedPair.length() != 2) {
         throw std::invalid_argument("overlappedPair must be string of length 2");
     }
@@ -132,8 +134,6 @@ std::string PlayFair::EncryptString(std::string string) {
             string[i + 1] = 'x';
         }
 
-        std::cout << string << std::endl;
-
         int charPosition[2][2] = {0};
 
         for (int j = 0; j < 5; j++) {
@@ -170,7 +170,7 @@ std::string PlayFair::EncryptString(std::string string) {
     return string;
 }
 
-void PlayFair::EncryptFile(std::string inputFilename, std::string outputFilename) {
+void PlayFair::EncryptFile(const std::string& inputFilename, const std::string& outputFilename) {
     std::ifstream inputFile(inputFilename, std::ios::in);
     std::ofstream outputFile(outputFilename, std::ios::out);
 
@@ -178,10 +178,13 @@ void PlayFair::EncryptFile(std::string inputFilename, std::string outputFilename
         throw std::runtime_error("Cannot open encryption files!");
     }
 
+    outputFile << "ENCRYPTION KEY  : " << encryptKey << std::endl;
+    outputFile << "OVERLAPPED PAIR : '" << overlappedPair[0] << "', " << overlappedPair[1] << "'" << std::endl;
+
     while (!inputFile.eof()) {
         std::string rawLine;
         getline(inputFile, rawLine, '.');
-        outputFile << EncryptString(rawLine);
+        outputFile << EncryptString(rawLine) << std::endl;
     }
 
     inputFile.close();
@@ -190,6 +193,7 @@ void PlayFair::EncryptFile(std::string inputFilename, std::string outputFilename
 
 int main() {
     std::string encryptKey, overlappedPair, input;
+    int modeSelection;
 
     std::cout << "TYPE ENCRYPT KEY : ";
     std::cin >> encryptKey;
@@ -197,19 +201,38 @@ int main() {
     std::cout << "TYPE OVERLAPPED PAIR : ";
     std::cin >> overlappedPair;
 
+    std::cout << "TYPE MODE SELECTION CODE (0 => File, 1 => Console) : ";
+    std::cin >> modeSelection;
+
     std::cin.ignore();
 
     PlayFair playFair(encryptKey, overlappedPair);
 
-    while (true) {
-        std::cout << "TYPE STRING FOR ENCRYPT : ";
-        getline(std::cin, input);
+    if (modeSelection == 0) {
+        std::string inputFilename, outputFilename;
 
-        if (input == "exit") {
-            break;
+        std::cout << "TYPE INPUT FILE PATH : ";
+        std::cin >> inputFilename;
+
+        std::cout << "TYPE OUTPUT FILE PATH : ";
+        std::cin >> outputFilename;
+
+        playFair.EncryptFile(inputFilename, outputFilename);
+
+        std::cout << "ENCRYPTION ENDED!" << std::endl;
+    } else if (modeSelection == 1) {
+        while (true) {
+            std::cout << "TYPE STRING FOR ENCRYPT : ";
+            getline(std::cin, input);
+
+            if (input == "exit") {
+                break;
+            }
+
+            std::cout << playFair.EncryptString(input) << std::endl;
         }
-
-        std::cout << playFair.EncryptString(input) << std::endl;
+    } else {
+        throw std::runtime_error("Mode selection code must be 1 or 0");
     }
 
     return EXIT_SUCCESS;
