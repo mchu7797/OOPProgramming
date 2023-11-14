@@ -8,7 +8,7 @@
 using namespace std;
 
 int main(void) {
-    const char *inputFileName = "alphabet.txt";
+    const char *inputFileName = "enc.txt";
     const char *outputFilename = "result.txt";
 
     ifstream inputStream(inputFileName);
