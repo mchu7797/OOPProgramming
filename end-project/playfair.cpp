@@ -174,9 +174,9 @@ std::string PlayFair::EncryptString(std::string string) {
             charPosition[0][0] = charPosition[0][0] + 1 > 4 ? 0 : charPosition[0][0] + 1;
             charPosition[1][0] = charPosition[1][0] + 1 > 4 ? 0 : charPosition[1][0] + 1;
         } else {
-            int temp = charPosition[0][0];
-            charPosition[0][0] = charPosition[1][0];
-            charPosition[1][0] = temp;
+            int temp = charPosition[0][1];
+            charPosition[0][1] = charPosition[1][1];
+            charPosition[1][1] = temp;
         }
 
         string[i] = encryptMatrix[charPosition[0][0]][charPosition[0][1]];
