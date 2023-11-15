@@ -127,12 +127,26 @@ std::string PlayFair::EncryptString(std::string string) {
         string.push_back('x');
     }
 
+    for (int i = 0; i < string.size(); ++i) {
+        int j = 0;
+
+        while (j < overlappedPair.size()) {
+            if (string[i] == overlappedPair[j]) {
+                break;
+            } else {
+                ++j;
+            }
+        }
+
+        if (j < overlappedPair.size()) {
+            string[i] = '0';
+        }
+    }
+
     for (int i = 0; i < string.size(); i += 2) {
         if (string[i] == string[i + 1]) {
             string[i + 1] = 'x';
         }
-
-        std::cout << string << std::endl;
 
         int charPosition[2][2] = {0};
 
