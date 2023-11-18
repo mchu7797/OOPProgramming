@@ -95,6 +95,8 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
             }
         } else if (j == encryptKeyBase.size()) {
             anotherElements.push_back(i);
+        } else {
+            return;
         }
     }
 
@@ -125,11 +127,7 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
 }
 
 std::string PlayFair::EncryptString(std::string string) {
-    if (string.length() % 2 != 0) {
-        string.push_back('x');
-    }
-
-    for (int i = 0; i < string.size(); ++i) {
+    for (int i = 0; i < string.size(); i++) {
         int j = 0;
 
         while (j < overlappedPair.size()) {
@@ -141,17 +139,26 @@ std::string PlayFair::EncryptString(std::string string) {
         }
 
         if (j < overlappedPair.size()) {
-            string[i] = '0';
+            i = '0';
         }
     }
 
     for (int i = 0; i < string.size(); i += 2) {
         if (string[i] == string[i + 1]) {
-            string[i + 1] = 'x';
+            string.insert(i + 1, "x");
         }
+    }
 
+    if (string.length() % 2 != 0) {
+        string.push_back('x');
+    }
+
+    std::cout << string << std::endl;
+
+    for (int i = 0; i < string.size(); i += 2) {
         int charPosition[2][2] = {0};
 
+        // Make positions of encryption table
         for (int j = 0; j < 5; j++) {
             for (int k = 0; k < 5; k++) {
                 if (encryptMatrix[j][k] == string[i]) {
