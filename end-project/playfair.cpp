@@ -5,19 +5,23 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <exception>
 #include <stdexcept>
 
 class PlayFair {
     char encryptMatrix[5][5] = {0};
     std::string encryptKey;
     std::string overlappedPair;
+
 public:
-    PlayFair(const std::string& encryptKey, std::string overlappedPair);
+    PlayFair(const std::string&encryptKey, std::string overlappedPair);
+
+    void MakeTable();
+
+    void ShowTable();
 
     std::string EncryptString(std::string string);
 
-    void EncryptFile(const std::string& inputFilename, const std::string& outputFilename);
+    void EncryptFile(const std::string&inputFilename, const std::string&outputFilename);
 };
 
 std::string RemoveDuplicates(std::string string) {
@@ -27,8 +31,9 @@ std::string RemoveDuplicates(std::string string) {
         while (j < string.size()) {
             if (string[i] == string[j]) {
                 string.erase(j, 1);
-            } else {
-                j++;
+            }
+            else {
+                ++j;
             }
         }
     }
@@ -36,14 +41,16 @@ std::string RemoveDuplicates(std::string string) {
     return string;
 }
 
-PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
+PlayFair::PlayFair(const std::string&encryptKey, std::string overlappedPair) {
     if (overlappedPair.length() != 2) {
         throw std::invalid_argument("overlappedPair must be string of length 2");
     }
 
     this->encryptKey = encryptKey;
     this->overlappedPair = overlappedPair;
+}
 
+void PlayFair::MakeTable() {
     std::string encryptKeyBase = RemoveDuplicates(encryptKey);
     std::string anotherElements;
 
@@ -56,13 +63,15 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
             if (encryptKeyBase[i] == overlappedPair[j]) {
                 if (overlapFound) {
                     encryptKeyBase.erase(i, 1);
-                } else {
+                }
+                else {
                     encryptKeyBase.replace(i, 1, "0");
                     overlapFound = true;
-                    j++;
+                    ++j;
                 }
-            } else {
-                j++;
+            }
+            else {
+                ++j;
             }
         }
     }
@@ -73,9 +82,8 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
         while (j < encryptKeyBase.size()) {
             if (encryptKeyBase[j] == i) {
                 break;
-            } else {
-                j++;
             }
+            ++j;
         }
 
         int k = 0;
@@ -83,9 +91,8 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
         while (k < overlappedPair.size()) {
             if (overlappedPair[k] == i) {
                 break;
-            } else {
-                k++;
             }
+            ++k;
         }
 
         if (k < overlappedPair.size()) {
@@ -93,10 +100,12 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
                 anotherElements.push_back('0');
                 overlapFound = true;
             }
-        } else if (j == encryptKeyBase.size()) {
+
+            continue;
+        }
+
+        if (j == encryptKeyBase.size()) {
             anotherElements.push_back(i);
-        } else {
-            return;
         }
     }
 
@@ -107,14 +116,18 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
         for (int j = 0; j < 5; j++) {
             if (n < encryptKeyBase.size()) {
                 encryptMatrix[i][j] = encryptKeyBase[n++];
-            } else {
+            }
+            else {
                 if (m < anotherElements.size()) {
                     encryptMatrix[i][j] = anotherElements[m++];
                 }
             }
         }
     }
+}
 
+
+void PlayFair::ShowTable() {
     std::cout << "-- Encrypt Matrix --" << std::endl;
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
@@ -126,6 +139,7 @@ PlayFair::PlayFair(const std::string& encryptKey, std::string overlappedPair) {
     std::cout << "'0' can be '" << overlappedPair[0] << "' or '" << overlappedPair[1] << "'" << std::endl;
 }
 
+
 std::string PlayFair::EncryptString(std::string string) {
     for (int i = 0; i < string.size(); i++) {
         int j = 0;
@@ -133,7 +147,8 @@ std::string PlayFair::EncryptString(std::string string) {
         while (j < overlappedPair.size()) {
             if (string[i] == overlappedPair[j]) {
                 break;
-            } else {
+            }
+            else {
                 ++j;
             }
         }
@@ -152,8 +167,6 @@ std::string PlayFair::EncryptString(std::string string) {
     if (string.length() % 2 != 0) {
         string.push_back('x');
     }
-
-    std::cout << string << std::endl;
 
     for (int i = 0; i < string.size(); i += 2) {
         int charPosition[2][2] = {0};
@@ -176,11 +189,13 @@ std::string PlayFair::EncryptString(std::string string) {
             // If y point is same.
             charPosition[0][1] = charPosition[0][1] + 1 > 4 ? 0 : charPosition[0][1] + 1;
             charPosition[1][1] = charPosition[1][1] + 1 > 4 ? 0 : charPosition[1][1] + 1;
-        } else if (charPosition[1][1] == charPosition[0][1]) {
+        }
+        else if (charPosition[1][1] == charPosition[0][1]) {
             // If x point is same.
             charPosition[0][0] = charPosition[0][0] + 1 > 4 ? 0 : charPosition[0][0] + 1;
             charPosition[1][0] = charPosition[1][0] + 1 > 4 ? 0 : charPosition[1][0] + 1;
-        } else {
+        }
+        else {
             int temp = charPosition[0][1];
             charPosition[0][1] = charPosition[1][1];
             charPosition[1][1] = temp;
@@ -193,7 +208,7 @@ std::string PlayFair::EncryptString(std::string string) {
     return string;
 }
 
-void PlayFair::EncryptFile(const std::string& inputFilename, const std::string& outputFilename) {
+void PlayFair::EncryptFile(const std::string&inputFilename, const std::string&outputFilename) {
     std::ifstream inputFile(inputFilename, std::ios::in);
     std::ofstream outputFile(outputFilename, std::ios::out);
 
@@ -202,11 +217,12 @@ void PlayFair::EncryptFile(const std::string& inputFilename, const std::string& 
     }
 
     outputFile << "ENCRYPTION KEY  : " << encryptKey << std::endl;
-    outputFile << "OVERLAPPED PAIR : '" << overlappedPair[0] << "', " << overlappedPair[1] << "'" << std::endl;
+    outputFile << "OVERLAPPED PAIR : '" << overlappedPair[0] << "', '" << overlappedPair[1] << "'" << std::endl;
 
     while (!inputFile.eof()) {
         std::string rawLine;
         getline(inputFile, rawLine, '.');
+        std::cout << rawLine << std::endl;
         outputFile << EncryptString(rawLine) << std::endl;
     }
 
@@ -231,6 +247,9 @@ int main() {
 
     PlayFair playFair(encryptKey, overlappedPair);
 
+    playFair.MakeTable();
+    playFair.ShowTable();
+
     if (modeSelection == 0) {
         std::string inputFilename, outputFilename;
 
@@ -243,7 +262,8 @@ int main() {
         playFair.EncryptFile(inputFilename, outputFilename);
 
         std::cout << "ENCRYPTION ENDED!" << std::endl;
-    } else if (modeSelection == 1) {
+    }
+    else if (modeSelection == 1) {
         while (true) {
             std::cout << "TYPE STRING FOR ENCRYPT : ";
             getline(std::cin, input);
@@ -252,9 +272,11 @@ int main() {
                 break;
             }
 
+            std::cout << input << std::endl;
             std::cout << playFair.EncryptString(input) << std::endl;
         }
-    } else {
+    }
+    else {
         throw std::runtime_error("Mode selection code must be 1 or 0");
     }
 
