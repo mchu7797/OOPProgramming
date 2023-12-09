@@ -23,3 +23,4 @@ add_executable(12-3 12th/12-3.cpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/end-project/enc.txt ${CMAKE_CURRENT_BINARY_DIR}/enc.txt COPYONLY)
 add_executable(Playfair end-project/playfair.cpp)
+add_executable(6-1 6th/6-1.cpp)
