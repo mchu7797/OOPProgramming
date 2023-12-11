@@ -42,15 +42,15 @@ std::string RemoveDuplicates(std::string string) {
 
 PlayFair::PlayFair(const std::string &encryptKey, std::string overlappedPair) {
     if (overlappedPair.length() != 2) {
-        throw std::invalid_argument("mKey must be string of length 2");
+        throw std::invalid_argument("Overlapped fair must be string of length 2");
     }
 
-    this->mPair = encryptKey;
-    this->mKey = overlappedPair;
+    this->mPair = overlappedPair;
+    this->mKey = encryptKey;
 }
 
 void PlayFair::MakeTable() {
-    std::string encryptKeyBase = RemoveDuplicates(mPair);
+    std::string encryptKeyBase = RemoveDuplicates(mKey);
     std::string anotherElements;
 
     bool overlapFound = false;
@@ -58,8 +58,9 @@ void PlayFair::MakeTable() {
     for (int i = 0; i < encryptKeyBase.size(); i++) {
         int j = 0;
 
-        while (j < mKey.size()) {
-            if (encryptKeyBase[i] == mKey[j]) {
+        // encryptKeyBase에 있는 mPair 요소 치환
+        while (j < mPair.size()) {
+            if (encryptKeyBase[i] == mPair[j]) {
                 if (overlapFound) {
                     encryptKeyBase.erase(i, 1);
                 } else {
@@ -73,26 +74,21 @@ void PlayFair::MakeTable() {
         }
     }
 
+    /* 알파벳 요소 중 mKey와 겹치는 문자를 제외하고 anotherElements에 추가*/
     for (char i = 'a'; i <= 'z'; i++) {
+        /* mPair 중복 제거 */
+        /* mPair 중복 제거가 선행되지 않으면, 0으로 치환되서 들어가야 할 문자가 mKey와 겹친다고 테이블에서 그냥 빠져버릴 수 있음 */
+
         int j = 0;
 
-        while (j < encryptKeyBase.size()) {
-            if (encryptKeyBase[j] == i) {
+        while (j < mPair.size()) {
+            if (mPair[j] == i) {
                 break;
             }
             ++j;
         }
 
-        int k = 0;
-
-        while (k < mKey.size()) {
-            if (mKey[k] == i) {
-                break;
-            }
-            ++k;
-        }
-
-        if (k < mKey.size()) {
+        if (j < mPair.size()) {
             if (!overlapFound) {
                 anotherElements.push_back('0');
                 overlapFound = true;
@@ -101,10 +97,23 @@ void PlayFair::MakeTable() {
             continue;
         }
 
-        if (j == encryptKeyBase.size()) {
+        /* mKey 중복 제거 */
+
+        int k = 0;
+
+        while (k < encryptKeyBase.size()) {
+            if (encryptKeyBase[k] == i) {
+                break;
+            }
+            ++k;
+        }
+
+        if (k == encryptKeyBase.size()) {
             anotherElements.push_back(i);
         }
     }
+
+    /* 테이블 채우기 */
 
     int n = 0;
     int m = 0;
@@ -137,16 +146,25 @@ void PlayFair::ShowTable() {
 
 
 std::string PlayFair::EncryptString(std::string string) {
-    for (int i = 0; i < string.size(); i++) {
+    /* 알파벳이 아닌 문자 전부 제거 */
+    for (int i = 0; i < string.size(); ++i) {
         if (!isalpha(string[i])) {
             string.erase(i, 1);
         }
     }
 
-    for (int i = 0; i < string.size(); i++) {
+    /* 테이블이 소문자로 구성되어 있기 때문에 모든 알파벳을 소문자로 변경 */
+    for (int i = 0; i < string.size(); ++i) {
+        if (isupper(string[i])) {
+            string[i] = tolower(string[i]);
+        }
+    }
+
+    /* mPair랑 같은 문자들 0으로 치환*/
+    for (int i = 0; i < string.size(); ++i) {
         int j = 0;
 
-        while (j < mKey.size()) {
+        while (j < mPair.size()) {
             if (string[i] == mKey[j]) {
                 break;
             } else {
@@ -154,17 +172,19 @@ std::string PlayFair::EncryptString(std::string string) {
             }
         }
 
-        if (j < mKey.size()) {
+        if (j < mPair.size()) {
             i = '0';
         }
     }
 
+    /* 문자 짝들 중 서로 같은 글자일 경우 그 사이에 x 추가 */
     for (int i = 0; i < string.size(); i += 2) {
         if (string[i] == string[i + 1]) {
             string.insert(i + 1, "x");
         }
     }
 
+    /* 문자열 짝수개로 만들기 */
     if (string.length() % 2 != 0) {
         string.push_back('x');
     }
@@ -195,6 +215,7 @@ std::string PlayFair::EncryptString(std::string string) {
             charPosition[0][0] = charPosition[0][0] + 1 > 4 ? 0 : charPosition[0][0] + 1;
             charPosition[1][0] = charPosition[1][0] + 1 > 4 ? 0 : charPosition[1][0] + 1;
         } else {
+            // Anything else.
             int temp = charPosition[0][1];
             charPosition[0][1] = charPosition[1][1];
             charPosition[1][1] = temp;
