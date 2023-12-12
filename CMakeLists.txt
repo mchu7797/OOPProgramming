@@ -16,7 +16,13 @@ add_executable(5-10 5th/5-10.cpp)
 add_executable(q5-11 5th/q5-11-3.cpp)
 
 add_executable(6-1 6th/6-1.cpp)
-add_executable(6-2 6th/6-2.cpp)
+
+add_executable(7-1 7th/7-1.cpp)
+
+add_executable(8-1 8th/8-1.cpp)
+
+add_executable(9-1 9th/9-1.cpp)
+add_executable(9-2 9th/9-2.cpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/12th/alphabet.txt ${CMAKE_CURRENT_BINARY_DIR}/alphabet.txt COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/12th/student-info.txt ${CMAKE_CURRENT_BINARY_DIR}/student-info.txt COPYONLY)
@@ -26,3 +32,4 @@ add_executable(12-3 12th/12-3.cpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/end-project/enc.txt ${CMAKE_CURRENT_BINARY_DIR}/enc.txt COPYONLY)
 add_executable(Playfair end-project/playfair.cpp)
+
