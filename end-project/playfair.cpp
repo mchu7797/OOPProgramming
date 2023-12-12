@@ -160,20 +160,11 @@ std::string PlayFair::EncryptString(std::string string) {
         }
     }
 
-    /* mPair랑 같은 문자들 0으로 치환*/
     for (int i = 0; i < string.size(); ++i) {
-        int j = 0;
-
-        while (j < mPair.size()) {
-            if (string[i] == mKey[j]) {
-                break;
-            } else {
-                ++j;
+        for (int j = 0; j < mPair.size(); ++j) {
+            if (string[i] == mPair[j]) {
+                string[i] = '0';
             }
-        }
-
-        if (j < mPair.size()) {
-            i = '0';
         }
     }
 
