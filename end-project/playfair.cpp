@@ -141,7 +141,7 @@ void PlayFair::ShowTable() {
         std::cout << std::endl;
     }
     std::cout << "-- Matrix Ends --" << std::endl;
-    std::cout << "'0' can be '" << mKey[0] << "' or '" << mKey[1] << "'" << std::endl;
+    std::cout << "'0' can be '" << mPair[0] << "' or '" << mPair[1] << "'" << std::endl;
 }
 
 
@@ -214,6 +214,12 @@ std::string PlayFair::EncryptString(std::string string) {
 
         string[i] = mTable[charPosition[0][0] * 5 + charPosition[0][1]];
         string[i + 1] = mTable[charPosition[1][0] * 5 + charPosition[1][1]];
+    }
+
+    for (int i = 0; i < string.size(); ++i) {
+        if (string[i] == '0') {
+            string[i] = mPair[0];
+        }
     }
 
     return string;
