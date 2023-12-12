@@ -16,6 +16,7 @@ add_executable(5-10 5th/5-10.cpp)
 add_executable(q5-11 5th/q5-11-3.cpp)
 
 add_executable(6-1 6th/6-1.cpp)
+add_executable(6-2 6th/6-2.cpp)
 
 add_executable(7-1 7th/7-1.cpp)
 
