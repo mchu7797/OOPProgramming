@@ -13,7 +13,7 @@ class PlayFair {
     std::string mKey;
 
 public:
-    PlayFair(const std::string &encryptKey, std::string overlappedPair);
+    PlayFair(std::string encryptKey, std::string overlappedPair);
 
     void MakeTable();
 
@@ -40,7 +40,7 @@ std::string RemoveDuplicates(std::string string) {
     return string;
 }
 
-PlayFair::PlayFair(const std::string &encryptKey, std::string overlappedPair) {
+PlayFair::PlayFair(std::string encryptKey, std::string overlappedPair) {
     if (overlappedPair.length() != 2) {
         throw std::invalid_argument("Overlapped fair must be string of length 2");
     }
@@ -79,36 +79,26 @@ void PlayFair::MakeTable() {
         /* mPair 중복 제거 */
         /* mPair 중복 제거가 선행되지 않으면, 0으로 치환되서 들어가야 할 문자가 mKey와 겹친다고 테이블에서 그냥 빠져버릴 수 있음 */
 
-        int j = 0;
-
-        while (j < mPair.size()) {
-            if (mPair[j] == i) {
-                break;
-            }
-            ++j;
-        }
-
-        if (j < mPair.size()) {
+        if (i == mPair[0] || i == mPair[1]) {
             if (!overlapFound) {
                 anotherElements.push_back('0');
                 overlapFound = true;
+            } else {
+                continue;
             }
-
-            continue;
         }
 
         /* mKey 중복 제거 */
 
-        int k = 0;
+        bool notDuplicated = true;
 
-        while (k < encryptKeyBase.size()) {
-            if (encryptKeyBase[k] == i) {
-                break;
+        for (int j = 0; j < encryptKeyBase.size(); ++j) {
+            if (i == encryptKeyBase[j]) {
+                notDuplicated = false;
             }
-            ++k;
         }
 
-        if (k == encryptKeyBase.size()) {
+        if (notDuplicated) {
             anotherElements.push_back(i);
         }
     }
@@ -160,11 +150,10 @@ std::string PlayFair::EncryptString(std::string string) {
         }
     }
 
+    /* mPair에 해당하는 문자를 0으로 먼저 치환 */
     for (int i = 0; i < string.size(); ++i) {
-        for (int j = 0; j < mPair.size(); ++j) {
-            if (string[i] == mPair[j]) {
-                string[i] = '0';
-            }
+        if (string[i] == mPair[0] || string[i] == mPair[1]) {
+            string[i] = '0';
         }
     }
 
