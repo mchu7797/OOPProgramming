@@ -1,6 +1,10 @@
 hello world.
 this is example test sentence for encrypt the message.
-my name is minseok chu.
+my
+name
+is
+minseok
+chu.
 becarefulforassasinator.
 h
 e

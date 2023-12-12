@@ -236,8 +236,8 @@ void PlayFair::EncryptFile(std::string inputFilename, std::string outputFilename
         throw std::runtime_error("Cannot open encryption files!");
     }
 
-    outputFile << "ENCRYPTION KEY  : " << mPair << std::endl;
-    outputFile << "OVERLAPPED PAIR : '" << mKey[0] << "', '" << mKey[1] << "'" << std::endl;
+    outputFile << "ENCRYPTION KEY  : " << mKey << std::endl;
+    outputFile << "OVERLAPPED PAIR : '" << mPair[0] << "', '" << mPair[1] << "'" << std::endl;
 
     while (!inputFile.eof()) {
         std::string rawLine, newLine;
