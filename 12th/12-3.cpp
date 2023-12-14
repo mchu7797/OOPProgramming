@@ -15,12 +15,12 @@ int main(void) {
     ofstream outputStream(outputFilename);
 
     if (!inputStream) {
-        cout << inputFileName << " : 읽기 오류!" << endl;
+        cout << inputFileName << " : Read Error!" << endl;
         return EXIT_FAILURE;
     }
 
     if (!outputStream) {
-        cout << outputFilename << " : 쓰기 오류!" << endl;
+        cout << outputFilename << " : Write Error!" << endl;
         return EXIT_FAILURE;
     }
 
