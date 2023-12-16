@@ -36,6 +36,10 @@ add_executable(12-1 12th/12-1.cpp)
 add_executable(12-2 12th/12-2.cpp)
 add_executable(12-3 12th/12-3.cpp)
 
+add_executable(13-1 13th/13-1.cpp)
+add_executable(13-2 13th/13-2.cpp)
+add_executable(13-3 13th/13-3.cpp)
+
 add_executable(Playfair end-project/playfair.cpp)
 
 configure_file(end-project/enc.txt enc.txt COPYONLY)
